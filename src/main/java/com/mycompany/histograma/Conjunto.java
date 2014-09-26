@@ -17,8 +17,8 @@ import java.util.logging.Logger;
 public class Conjunto extends Observable{
     int x[];
 
-    public Conjunto() {
-        x=new int[100];
+    public Conjunto(int intQuantity) {
+        x=new int[intQuantity];
         Random r=new Random(System.currentTimeMillis());
         for (int i = 0; i < x.length; i++) {
             x[i]=r.nextInt(200);            
@@ -42,19 +42,43 @@ public class Conjunto extends Observable{
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Conjunto.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                    
-                
-            }
-            
+                }    
+            }     
         }
+    }
+    
+    
+    public void ordenarQuickSort(){
+        Boolean b=true;
+        int i = x[0], j = x[x.length];
+        int tmp;
+        int pivot = x[(x[0] + x[x.length]) / 2];
+        while (i <= j) {
+            while (x[i] < pivot)
+                  i++;
+            while (x[j] > pivot)
+                  j--;
+            if (i <= j) {
+                  tmp = x[i];
+                  x[i] = x[j];
+                  x[j] = tmp;
+                  this.setChanged();
+                  this.notifyObservers(tmp);
+                  i++;
+                  j--;
+            }
+            synchronized(b){
+                    try {
+                        b.wait(5);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Conjunto.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+        };
     }
 
     int[] getX() {
         return x;
     }
-    
-    
-    
-    
+
 }
