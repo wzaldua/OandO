@@ -14,15 +14,15 @@ import java.util.logging.Logger;
  *
  * @author f211
  */
-public class Conjunto extends Observable{
+public class BubleSort extends Observable{
     int x[];
-
-    public Conjunto(int intQuantity) {
+    
+    public BubleSort(int intQuantity){
         x=new int[intQuantity];
         Random r=new Random(System.currentTimeMillis());
         for (int i = 0; i < x.length; i++) {
             x[i]=r.nextInt(200);            
-        }
+        } 
     }
     
     public void ordenar(){
@@ -46,9 +46,9 @@ public class Conjunto extends Observable{
             }     
         }
     }
-    
+
     int[] getX() {
         return x;
     }
-
+    
 }

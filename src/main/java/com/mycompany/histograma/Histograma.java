@@ -46,7 +46,7 @@ public class Histograma extends JPanel implements Observer {
                 g.setColor(Color.RED);
             else
                 g.setColor(Color.GREEN);
-            g.drawLine(xi,10, xi,10+y);
+            g.drawLine(xi,300, xi,10+y);
             xi+=5;
             i++;
             
@@ -107,7 +107,15 @@ public class Histograma extends JPanel implements Observer {
 
             @Override
             public void run() {
-                   c.ordenarQuickSort();
+                   c.ordenar();
+            }
+        });
+        
+        final Thread ordenSort=new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                   c.ordenar();
             }
         });
         //Listener Button1
@@ -124,11 +132,10 @@ public class Histograma extends JPanel implements Observer {
          }          
         }); 
         
-        
         //Listener Button3
         button3.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-             
+             ordenSort.start();
          }          
         }); 
         
