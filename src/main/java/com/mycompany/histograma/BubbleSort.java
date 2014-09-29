@@ -12,53 +12,40 @@ import java.util.logging.Logger;
  *
  * @author f211
  */
-public class ShellSort implements Command{
-
+public class BubbleSort implements Command{
     public int x[];
 
-    ShellSort(int[] x) {
+    BubbleSort(int[] x){
+        this.x = x;
+    }
+    public void BubbleSort(int x[]){
         this.x = x;
     }
     
-    public void ShellSort(int x[])
-    {
-        this.x = x;
-    }
-
     @Override
     public void Execute() {
-         Boolean b=true;
-        int increment = this.x.length / 2;
-	while (increment > 0) {
-		for (int i = increment; i < this.x.length; i++) {
-			int j = i;
-			int temp = this.x[i];
-			while (j >= increment && this.x[j - increment] > temp) {
-				this.x[j] = this.x[j - increment];
-				j = j - increment;
-			}
-			this.x[j] = temp;
-                         
-		}
-		if (increment == 2) {
-			increment = 1;
-		} else {
-			increment *= (5.0 / 11);
-		}
-	}
-        
-        synchronized(b){
+    Boolean b=true;
+        for (int i = 0; i < this.x.length; i++) {
+            for (int j = i+1; j < this.x.length; j++) {
+                if(this.x[i]>this.x[j]){
+                    int tmp=this.x[i];
+                    this.x[i]=this.x[j];
+                    this.x[j]=tmp;                    
+                }
+                synchronized(b){
                     try {
                         b.wait(5);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Conjunto.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+            }
+        }
     }
     
     public int [] getX()
     {
         return this.x;
     }
-    
+       
 }

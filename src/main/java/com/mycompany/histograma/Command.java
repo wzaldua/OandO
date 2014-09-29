@@ -9,6 +9,8 @@ package com.mycompany.histograma;
  *
  * @author f211
  */
-public class Command {
-    
+public interface Command {
+ 
+     void Execute();
+
 }

@@ -7,8 +7,6 @@ package com.mycompany.histograma;
 
 import java.util.Observable;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -16,7 +14,8 @@ import java.util.logging.Logger;
  */
 public class Conjunto extends Observable{
     int x[];
-
+    private Command buCommand;
+    
     public Conjunto(int intQuantity) {
         x=new int[intQuantity];
         Random r=new Random(System.currentTimeMillis());
@@ -25,30 +24,19 @@ public class Conjunto extends Observable{
         }
     }
     
-    public void ordenar(){
-        Boolean b=true;
-        for (int i = 0; i < x.length; i++) {
-            for (int j = i+1; j < x.length; j++) {
-                if(x[i]>x[j]){
-                    int tmp=x[i];
-                    x[i]=x[j];
-                    x[j]=tmp;                    
-                    this.setChanged();
-                    this.notifyObservers(tmp);
-                }
-                synchronized(b){
-                    try {
-                        b.wait(5);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Conjunto.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }    
-            }     
-        }
+    public void setCommand(Command command)
+    {
+        this.buCommand = command;
+    }
+    
+    public void Ordenar()
+    {
+       buCommand.Execute();
+       this.setChanged();
+       this.notifyObservers(this.x);
     }
     
     int[] getX() {
         return x;
     }
-
 }

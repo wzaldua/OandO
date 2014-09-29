@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -27,12 +28,17 @@ import javax.swing.JPanel;
  */
 public class Histograma extends JPanel implements Observer {
     private static Object frame;
-    Conjunto c;
+    static Conjunto c;
+    
+    //Command
+    static Command bubble;
+    static Command shell;
+    static Command quick;
     public Histograma(Conjunto c) {
         this.c=c;
-        this.setSize(new Dimension(400,400));
-        this.setMinimumSize(new Dimension(400,400));
-        this.setPreferredSize(new Dimension(400,400));
+        this.setSize(new Dimension(500,500));
+        this.setMinimumSize(new Dimension(500,500));
+        this.setPreferredSize(new Dimension(500,500));
     }
 
     @Override
@@ -46,21 +52,20 @@ public class Histograma extends JPanel implements Observer {
                 g.setColor(Color.RED);
             else
                 g.setColor(Color.GREEN);
-            g.drawLine(xi,300, xi,10+y);
+            g.drawLine(xi,10, xi,10+y);
             xi+=5;
             i++;
-            
+            g.setColor(Color.BLACK);
+            g.drawString(Arrays.toString(c.getX()), 50, 350);
         }
     }
-    
-    
-    
-
     
     @Override
     public void update(Observable o, Object arg) {
         this.updateUI();
     }
+    
+    
     
     
     public static void main(String[] args) {
@@ -76,9 +81,13 @@ public class Histograma extends JPanel implements Observer {
         JButton  button1 = new JButton ("Organizar por burbuja");
         JButton  button2 = new JButton ("Organizar por QuickSort");
         JButton  button3 = new JButton ("Organizar por ShowSort");
+        //ButtonHandler
+        buttonHandler vf = new buttonHandler();
+        //Command Class
+        bubble = new BubbleSort(c.getX());
+        shell = new ShellSort(c.getX());
+        quick = new QuickSort(c.getX());
         
-            
-        System.out.println(intQuantity);
         f.add(contentCenter,BorderLayout.SOUTH);
         contentCenter.add(button1);
         contentCenter.add(button2);
@@ -95,49 +104,42 @@ public class Histograma extends JPanel implements Observer {
         
         t.start();
         
-        final Thread orden=new Thread(new Runnable() {
+        /*final Thread orden=new Thread(new Runnable() {
 
             @Override
             public void run() {
-                   c.ordenar();
+                   c.ordenarBurbuja();
+//                   JTextField text;
+//                text = new JTextField(Arrays.toString(c.getX()));
+//                   f.add(text);
             }
-        });
+        });*/
         
-        final Thread ordenQuick=new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                   c.ordenar();
-            }
-        });
         
-        final Thread ordenSort=new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                   c.ordenar();
-            }
-        });
+         button1.addActionListener(vf);
+         button2.addActionListener(vf);
+         button3.addActionListener(vf);
         //Listener Button1
-        button1.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-             orden.start();
-         }          
-        }); 
-        
-        //Listener Button2
-        button2.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-             ordenQuick.start();
-         }          
-        }); 
-        
-        //Listener Button3
-        button3.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-             ordenSort.start();
-         }          
-        }); 
+//        button1.addActionListener(new ActionListener() {
+//        public void actionPerformed(ActionEvent e) {
+//             orden.start();
+//         }          
+//        }); 
+//        
+//        Listener Button2
+//        button2.addActionListener(new ActionListener() {
+//        public void actionPerformed(ActionEvent e) {
+//             ordenQuick.start();
+//         }          
+//        }); 
+//        
+//        
+//        Listener Button3
+//        button3.addActionListener(new ActionListener() {
+//        public void actionPerformed(ActionEvent e) {
+//             ordenSort.start();
+//         }          
+//        }); 
         
         try {
             Thread.currentThread().join();
@@ -145,4 +147,13 @@ public class Histograma extends JPanel implements Observer {
             Logger.getLogger(Histograma.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static class buttonHandler implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      //ActionListenerCommand CommandObj = (ActionListenerCommand) e.getSource();
+        c.setCommand(bubble);
+        c.Ordenar();
+        
+    }
+  }
 }
